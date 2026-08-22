@@ -1,6 +1,6 @@
 {
   "name": "aliyun-ossutil",
-  "version": "0.2.0+codex.20260822212715",
+  "version": "2.3.0+codex.20260822223330",
   "description": "Manage Alibaba Cloud OSS resources with ossutil 2.0 commands and bundled official docs.",
   "author": {
     "name": "nieaowei",
