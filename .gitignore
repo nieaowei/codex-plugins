@@ -1,0 +1,4 @@
+# Machine-local CodeGraph index (absolute path symlink)
+.codegraph
+
+.DS_Store

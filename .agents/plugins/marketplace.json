@@ -1,0 +1,20 @@
+{
+  "name": "codex-plugins",
+  "interface": {
+    "displayName": "Codex Plugins"
+  },
+  "plugins": [
+    {
+      "name": "aliyun-ossutil",
+      "source": {
+        "source": "local",
+        "path": "./plugins/aliyun-ossutil"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
