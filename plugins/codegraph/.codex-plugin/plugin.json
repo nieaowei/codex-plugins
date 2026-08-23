@@ -1,0 +1,19 @@
+{
+  "name": "codegraph",
+  "version": "1.5.0",
+  "description": "CodeGraph semantic code intelligence for Codex: pre-indexed local code knowledge graph with auto sync.",
+  "author": {
+    "name": "Local developer"
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "CodeGraph",
+    "shortDescription": "Local code knowledge graph for faster, more precise code answers.",
+    "longDescription": "Wraps the CodeGraph CLI (github.com/colbymchenry/codegraph): indexes a repository into a local knowledge graph that auto-syncs on code changes, and guides Codex to query it instead of grepping, reducing tokens and tool calls.",
+    "developerName": "Local developer",
+    "category": "Developer Tools",
+    "capabilities": [],
+    "defaultPrompt": "Use codegraph to answer questions about this repository."
+  }
+}
