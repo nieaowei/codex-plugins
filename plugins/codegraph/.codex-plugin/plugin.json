@@ -1,6 +1,6 @@
 {
   "name": "codegraph",
-  "version": "1.5.0+codex.20260823171857",
+  "version": "1.5.0+codex.20260823103046",
   "description": "Semantic code intelligence for Codex through a local CodeGraph index and MCP server.",
   "author": {
     "name": "Colby McHenry",
@@ -30,8 +30,7 @@
     "defaultPrompt": [
       "Before editing this feature, use CodeGraph to map its entry point, callers, callees, and tests.",
       "Use CodeGraph first to trace this bug's route and identify the smallest safe change.",
-      "Use CodeGraph to explain how this repository's request flow works.",
-      "Use CodeGraph to assess the impact of changing this function and inspect affected tests."
+      "Use CodeGraph to explain how this repository's request flow works."
     ]
   }
 }

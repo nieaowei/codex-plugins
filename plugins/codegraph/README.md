@@ -10,8 +10,12 @@ change.
 Install the upstream CLI on macOS or Linux from this plugin directory:
 
 ```bash
-CODEGRAPH_VERSION=1.5.0 bash scripts/install-codegraph.sh
+bash scripts/install-codegraph.sh
 ```
+
+This installs the CodeGraph release pinned in `.codex-plugin/plugin.json`
+(currently v1.5.0). Override with `CODEGRAPH_VERSION=x.y.z` when you need a
+different release.
 
 The plugin's MCP server starts `codegraph serve --mcp`; it does not modify Codex
 configuration outside the plugin. The skill makes CodeGraph the mandatory first

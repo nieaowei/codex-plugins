@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Shared helpers: PLUGIN_ROOT, resolve_codegraph_version, resolve_codegraph_bin
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/common.sh"
+
 if [[ $# -gt 1 ]]; then
   printf 'Usage: %s [repo-root]\n' "$0" >&2
   exit 2
@@ -16,14 +19,9 @@ if command -v git >/dev/null 2>&1; then
   fi
 fi
 
-local_bin="${CODEGRAPH_BIN_DIR:-${HOME}/.local/bin}/codegraph"
-if [[ -x "${local_bin}" ]]; then
-  CODEGRAPH_BIN="${local_bin}"
-elif command -v codegraph >/dev/null 2>&1; then
-  CODEGRAPH_BIN="$(command -v codegraph)"
-else
+if ! CODEGRAPH_BIN="$(resolve_codegraph_bin)"; then
   printf '%s\n' 'CodeGraph CLI is not installed or is not on PATH.' >&2
-  printf '%s\n' 'Run CODEGRAPH_VERSION=1.5.0 bash scripts/install-codegraph.sh from the plugin directory.' >&2
+  printf 'Run CODEGRAPH_VERSION=%s bash scripts/install-codegraph.sh from the plugin directory.\n' "$(resolve_codegraph_version || true)" >&2
   exit 127
 fi
 
@@ -33,4 +31,15 @@ if [[ -d "${project_dir}/.codegraph" ]]; then
 fi
 
 printf 'Initializing CodeGraph index: %s\n' "${project_dir}"
-exec "${CODEGRAPH_BIN}" init "${project_dir}"
+if ! "${CODEGRAPH_BIN}" init "${project_dir}"; then
+  printf 'CodeGraph init failed for: %s\n' "${project_dir}" >&2
+  exit 1
+fi
+
+if [[ ! -d "${project_dir}/.codegraph" ]]; then
+  printf 'CodeGraph init completed but did not create %s/.codegraph\n' "${project_dir}" >&2
+  exit 1
+fi
+
+printf 'CodeGraph index initialized: %s/.codegraph\n' "${project_dir}"
+

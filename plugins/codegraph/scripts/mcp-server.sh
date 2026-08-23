@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LOCAL_CODEGRAPH_BIN="${CODEGRAPH_BIN_DIR:-${HOME}/.local/bin}/codegraph"
-if [[ -x "${LOCAL_CODEGRAPH_BIN}" ]]; then
-  CODEGRAPH_BIN="${LOCAL_CODEGRAPH_BIN}"
-elif command -v codegraph >/dev/null 2>&1; then
-  CODEGRAPH_BIN="$(command -v codegraph)"
-else
+# Shared helpers: PLUGIN_ROOT, resolve_codegraph_version, resolve_codegraph_bin
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/common.sh"
+
+if ! CODEGRAPH_BIN="$(resolve_codegraph_bin)"; then
   printf '%s\n' 'CodeGraph CLI is not installed or is not on PATH.' >&2
-  printf '%s\n' 'Run CODEGRAPH_VERSION=1.5.0 bash scripts/install-codegraph.sh from the plugin directory.' >&2
+  printf 'Run CODEGRAPH_VERSION=%s bash scripts/install-codegraph.sh from the plugin directory.\n' "$(resolve_codegraph_version || true)" >&2
   exit 127
 fi
 
 exec "${CODEGRAPH_BIN}" serve --mcp "$@"
+

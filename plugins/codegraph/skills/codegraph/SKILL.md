@@ -95,11 +95,11 @@ Check availability before relying on the CLI:
 command -v codegraph
 ```
 
-If it is missing on macOS or Linux, install the pinned upstream release from the
-plugin directory:
+If it is missing on macOS or Linux, install the upstream release pinned in the
+plugin manifest from the plugin directory:
 
 ```bash
-CODEGRAPH_VERSION=1.5.0 bash scripts/install-codegraph.sh
+bash scripts/install-codegraph.sh
 ```
 
 Then open a new shell if `~/.local/bin` is not already on `PATH`.
