@@ -1,6 +1,6 @@
 {
   "name": "codegraph",
-  "version": "1.5.0+codex.20260823103046",
+  "version": "1.5.0+codex.20260823103613",
   "description": "Semantic code intelligence for Codex through a local CodeGraph index and MCP server.",
   "author": {
     "name": "Colby McHenry",

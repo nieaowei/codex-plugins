@@ -1,6 +1,6 @@
 ---
 name: codegraph
-description: ALWAYS use CodeGraph as the FIRST step of implementation, debugging, refactoring, testing, review, architecture, or any multi-file code investigation, before rg/grep/read/edit. Automatically initialize an unindexed project first; do not wait for the user to name CodeGraph. Only an exact single-file text lookup, self-contained docs/config edit, explicit user opt-out, or proven CodeGraph unavailability excuses skipping it.
+description: ALWAYS use CodeGraph as the FIRST step of implementation, debugging, refactoring, testing, review, architecture, or any multi-file code investigation, before rg/grep/read/edit. Automatically initialize an unindexed project first; do not wait for the user to name CodeGraph.
 ---
 
 # CodeGraph
@@ -53,11 +53,9 @@ crawling, or the first edit:
    ```
 
    Resolve `${PLUGIN_ROOT}` to the installed plugin directory when the variable
-   is not exported. This plugin intentionally opts into local initialization for
-   matching repository tasks; do not run it for one-file or unrelated work.
-   Wait for it to finish, verify the index exists, and then continue with the
-   `codegraph_explore` query. The helper is idempotent when an index already
-   exists.
+   is not exported. Wait for it to finish, verify the index exists, and then
+   continue with the `codegraph_explore` query. The helper is idempotent when
+   an index already exists.
 4. Call the `codegraph_explore` MCP tool first, passing the absolute
    `projectPath` only when querying a repository other than the MCP server's
    current root. Keep the query narrow and name the important symbol, file,
@@ -104,14 +102,9 @@ bash scripts/install-codegraph.sh
 
 Then open a new shell if `~/.local/bin` is not already on `PATH`.
 
-The helper automatically creates a local index for a matching task when one is
-missing:
-
-```bash
-bash "${PLUGIN_ROOT}/scripts/ensure-index.sh" <repo-root>
-```
-
-Do not re-initialize an existing project after ordinary edits. The file watcher
+For a matching task, the required workflow above initializes an unindexed
+project via `bash "${PLUGIN_ROOT}/scripts/ensure-index.sh" <repo-root>`. Do
+not re-initialize an existing project after ordinary edits; the file watcher
 keeps an existing index current.
 
 ## CLI fallback
