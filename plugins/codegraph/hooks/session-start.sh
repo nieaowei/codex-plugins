@@ -34,7 +34,7 @@ done
 # The hook already proved that this session has a CodeGraph index. Keep the
 # injected reminder hardcoded so it remains concise and does not duplicate
 # skill-routing metadata that has already been enforced above.
-context='Use the `codegraph` skill for this task. Call `codegraph_explore` before grep, find, or reading indexed code; query relevant symbols or file paths and use the returned source and call paths.'
+context='Codegraph index available and .codegraph directory exists. Use the `codegraph` skill for this task. Call `codegraph_explore` before grep, find, or reading indexed code; query relevant symbols or file paths and use the returned source and call paths.'
 
 # Escape the JSON characters without requiring a runtime dependency beyond Bash.
 json_context="$(printf '%s' "$context" | sed 's/\\/\\\\/g; s/"/\\"/g')"
