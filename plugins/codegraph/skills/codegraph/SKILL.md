@@ -40,11 +40,12 @@ line-numbered source** grouped by file, plus the call path (including
 dynamic-dispatch hops such as callbacks, React re-renders, and JSX children) and
 a blast-radius summary.
 
-The MCP server starts without a `.codegraph/` at its own root, there is no
-default project, but the tool can still query any project that has an index.
-Must be pass that project's absolute path as `projectPath` to `codegraph_explore`; the
-nearest `.codegraph/` at or above that path is used. For a project with no index,
-use built-in tools and do not initialize it automatically.
+The MCP server starts without a `.codegraph/` index of its own, so there is no
+default project; the tool can still query any project that has an index. Always
+pass the target repository's absolute path as `projectPath` to
+`codegraph_explore`; the nearest `.codegraph/` at or above that path is used.
+For a project with no index, use built-in tools and do not initialize it
+automatically.
 
 Whether answering how something works or implementing a change, call
 `codegraph_explore` before reading indexed files. One call usually answers the
