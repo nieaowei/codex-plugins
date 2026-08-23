@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "CodeGraph",
     "shortDescription": "Local semantic code intelligence for precise repository answers.",
-    "longDescription": "Connects Codex to the CodeGraph CLI and its codegraph_explore MCP tool. CodeGraph builds a local knowledge graph, follows cross-file calls and dependencies, reports impact radius, and auto-syncs indexed projects as files change.",
+    "longDescription": "Connects Codex to the CodeGraph CLI and its codegraph_explore MCP tool. Codex proactively maps cross-file edits and investigations, automatically initializes missing project indexes for matching tasks, follows calls, dependencies, routes, and impact, and auto-syncs indexed projects as files change.",
     "developerName": "Colby McHenry",
     "category": "Developer Tools",
     "capabilities": [
@@ -28,9 +28,10 @@
     ],
     "websiteURL": "https://colbymchenry.github.io/codegraph/",
     "defaultPrompt": [
+      "Before editing this feature, use CodeGraph to map its entry point, callers, callees, and tests.",
+      "Use CodeGraph first to trace this bug's route and identify the smallest safe change.",
       "Use CodeGraph to explain how this repository's request flow works.",
-      "Use CodeGraph to trace callers and callees of this symbol.",
-      "Use CodeGraph to assess the impact of changing this function."
+      "Use CodeGraph to assess the impact of changing this function and inspect affected tests."
     ]
   }
 }

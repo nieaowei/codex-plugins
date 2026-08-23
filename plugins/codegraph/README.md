@@ -14,24 +14,39 @@ CODEGRAPH_VERSION=1.5.0 bash scripts/install-codegraph.sh
 ```
 
 The plugin's MCP server starts `codegraph serve --mcp`; it does not modify Codex
-configuration outside the plugin. When Codex detects a repository-understanding
-intent, the skill automatically initializes the project if `.codegraph/` is
-missing:
+configuration outside the plugin. The skill treats CodeGraph as the first map
+for code changes and investigations, even when the user does not mention
+CodeGraph. For matching repository tasks it automatically initializes an
+unindexed project before querying:
 
 ```bash
 bash scripts/ensure-index.sh /path/to/project
 ```
 
 The index lives in `.codegraph/` and is local to that project. The watcher keeps
-it fresh after initialization. Use `codegraph status` or `codegraph sync` for
-diagnostics and manual synchronization. Exact one-file lookups and unrelated
-tasks do not trigger initialization.
+it fresh after initialization. Use `codegraph status <repo-root>` or
+`codegraph sync <repo-root>` for diagnostics and manual synchronization. Exact
+one-file lookups, self-contained docs/config edits, and unrelated tasks do not
+trigger initialization. If initialization, the CLI, or MCP fails, the skill
+reports that briefly and falls back to normal repository tools.
+
+## Proactive use
+
+For an implementation, bug fix, refactor, rename, test, review, or architecture
+task, the skill queries `codegraph_explore` before broad file search or the first
+edit when relationships may cross files. It uses the graph to find entry points,
+callers, callees, routes, dependencies, and impact, then uses exact file tools
+only for symbols/files omitted by the graph, configs/docs, generated files, or
+stale-banner files. Cross-file changes get a second callers/impact query before
+they are finalized. If the CLI, MCP server, or index is unavailable, the skill
+reports that briefly and falls back to normal repository tools.
 
 ## Included behavior
 
-- `codegraph_explore` is the default MCP tool for semantic repository questions.
-- The `codegraph` skill teaches when to query the graph and when to fall back to
-  exact file tools.
+- `codegraph_explore` is the default MCP tool for semantic repository questions
+  and pre-edit code reconnaissance.
+- The `codegraph` skill triggers on implementation and investigation work, with
+  explicit skip conditions for isolated one-file and plain-text tasks.
 - The wrapper gives an actionable error when the CLI is not installed.
 
 CodeGraph is MIT-licensed and runs locally. See the [upstream repository](https://github.com/colbymchenry/codegraph) and [documentation](https://colbymchenry.github.io/codegraph/) for the complete CLI, supported languages, and troubleshooting guide.
