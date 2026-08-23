@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "codegraph": {
-      "command": "bash",
-      "cwd": ".",
-      "args": ["scripts/mcp-server.sh"]
-    }
-  }
-}

@@ -16,7 +16,6 @@
     "mcp"
   ],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "CodeGraph",
     "shortDescription": "Local semantic code intelligence for precise repository answers.",
