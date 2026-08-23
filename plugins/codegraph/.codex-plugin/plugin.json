@@ -1,0 +1,36 @@
+{
+  "name": "codegraph",
+  "version": "1.5.0+codex.20260823074938",
+  "description": "Semantic code intelligence for Codex through a local CodeGraph index and MCP server.",
+  "author": {
+    "name": "Colby McHenry",
+    "url": "https://github.com/colbymchenry"
+  },
+  "homepage": "https://colbymchenry.github.io/codegraph/",
+  "repository": "https://github.com/colbymchenry/codegraph",
+  "license": "MIT",
+  "keywords": [
+    "codegraph",
+    "code-intelligence",
+    "static-analysis",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "CodeGraph",
+    "shortDescription": "Local semantic code intelligence for precise repository answers.",
+    "longDescription": "Connects Codex to the CodeGraph CLI and its codegraph_explore MCP tool. CodeGraph builds a local knowledge graph, follows cross-file calls and dependencies, reports impact radius, and auto-syncs indexed projects as files change.",
+    "developerName": "Colby McHenry",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive"
+    ],
+    "websiteURL": "https://colbymchenry.github.io/codegraph/",
+    "defaultPrompt": [
+      "Use CodeGraph to explain how this repository's request flow works.",
+      "Use CodeGraph to trace callers and callees of this symbol.",
+      "Use CodeGraph to assess the impact of changing this function."
+    ]
+  }
+}
