@@ -3,8 +3,8 @@
 This plugin connects Codex to the upstream CodeGraph CLI and its local
 `codegraph_explore` MCP tool. CodeGraph indexes source code into a local graph,
 traces cross-file relationships, and auto-syncs an indexed project as files
-change. A SessionStart hook injects the skill description as additional
-developer context.
+change. A SessionStart hook injects a concise CodeGraph usage reminder as
+additional developer context.
 
 ## Setup
 
@@ -51,8 +51,9 @@ required substitutes.
 
 - `codegraph_explore` is the default MCP tool for semantic repository questions
   and pre-edit code reconnaissance.
-- The `SessionStart` hook injects the current skill description through
-  `hookSpecificOutput.additionalContext` on startup, resume, clear, and compact.
+- The `SessionStart` hook injects a hardcoded, concise reminder to use the
+  `codegraph` skill through `hookSpecificOutput.additionalContext` on startup,
+  resume, clear, and compact when a project index is present.
 - The `codegraph` skill triggers on implementation and investigation work, with
   an explicit skip condition for projects without a `.codegraph/` index.
 - The wrapper gives an actionable error when the CLI is not installed.

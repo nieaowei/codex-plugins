@@ -31,26 +31,11 @@ done
 
 [[ -n "${codegraph_root}" ]] || exit 0
 
-: "${PLUGIN_ROOT:?PLUGIN_ROOT must be set by Codex when running plugin hooks}"
-skill_file="${PLUGIN_ROOT}/skills/codegraph/SKILL.md"
+# The hook already proved that this session has a CodeGraph index. Keep the
+# injected reminder hardcoded so it remains concise and does not duplicate
+# skill-routing metadata that has already been enforced above.
+context='Use the `codegraph` skill for this task. Call `codegraph_explore` before grep, find, or reading indexed code; query relevant symbols or file paths and use the returned source and call paths.'
 
-if [[ ! -f "${skill_file}" ]]; then
-  exit 0
-fi
-
-description="$(sed -n '/^---[[:space:]]*$/,/^---[[:space:]]*$/ {
-  /^description:[[:space:]]*/ {
-    s/^description:[[:space:]]*//
-    p
-    q
-  }
-}' "${skill_file}")"
-
-if [[ -z "${description}" ]]; then
-  exit 0
-fi
-
-# The frontmatter description is a single line. Escape the JSON characters
-# here so the hook has no runtime dependency beyond Bash.
-json_description="$(printf '%s' "$description" | sed 's/\\/\\\\/g; s/"/\\"/g')"
-printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$json_description"
+# Escape the JSON characters without requiring a runtime dependency beyond Bash.
+json_context="$(printf '%s' "$context" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$json_context"

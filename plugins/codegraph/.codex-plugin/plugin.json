@@ -1,6 +1,6 @@
 {
   "name": "codegraph",
-  "version": "1.5.0+codex.20260823120330",
+  "version": "1.5.0+codex.20260823122039",
   "description": "Semantic code intelligence for Codex through a local CodeGraph index and MCP server.",
   "author": {
     "name": "Colby McHenry",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "CodeGraph",
     "shortDescription": "Local semantic code intelligence for precise repository answers.",
-    "longDescription": "Connects Codex to the CodeGraph CLI and its codegraph_explore MCP tool. Codex proactively maps cross-file edits and investigations in indexed projects, follows calls, dependencies, routes, and impact, injects the skill description at SessionStart, and auto-syncs indexed projects as files change.",
+    "longDescription": "Connects Codex to the CodeGraph CLI and its codegraph_explore MCP tool. Codex proactively maps cross-file edits and investigations in indexed projects, follows calls, dependencies, routes, and impact, injects a hardcoded reminder to use the codegraph skill at SessionStart, and auto-syncs indexed projects as files change.",
     "developerName": "Colby McHenry",
     "category": "Developer Tools",
     "capabilities": [

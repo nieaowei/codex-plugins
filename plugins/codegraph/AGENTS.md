@@ -48,9 +48,9 @@ Three plugin bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
 
 - `hooks/hooks.json` registers the `SessionStart` hook for startup, resume,
   clear, and compact events.
-- `hooks/session-start.sh` reads the skill frontmatter and emits its
-  `description` through `hookSpecificOutput.additionalContext`. Keep the
-  output concise and avoid secrets.
+- `hooks/session-start.sh` emits a hardcoded, concise reminder to use the
+  `codegraph` skill through `hookSpecificOutput.additionalContext` after the
+  index check passes. Keep the output concise and avoid secrets.
 
 ## Development workflow
 
