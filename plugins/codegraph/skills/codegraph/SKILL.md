@@ -13,7 +13,7 @@ understand or locate code:
   in one call — the relevant symbols' verbatim source plus the call paths
   between them, including dynamic-dispatch hops grep can't follow. Name a file
   or symbol in the query to read its current line-numbered source.
-- **Shell (always works):** `codegraph explore "<symbol names or question>"`
+- **Shell (when MCP tool unavailable):** `codegraph explore "<symbol names or question>"`
   prints the same output.
 
 If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is
