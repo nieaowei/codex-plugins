@@ -14,10 +14,11 @@ CODEGRAPH_VERSION=1.5.0 bash scripts/install-codegraph.sh
 ```
 
 The plugin's MCP server starts `codegraph serve --mcp`; it does not modify Codex
-configuration outside the plugin. The skill treats CodeGraph as the first map
-for code changes and investigations, even when the user does not mention
+configuration outside the plugin. The skill makes CodeGraph the mandatory first
+step for code changes and investigations, even when the user does not mention
 CodeGraph. For matching repository tasks it automatically initializes an
-unindexed project before querying:
+unindexed project before querying; only exact single-file lookups,
+self-contained docs/config edits, or explicit user opt-out skip it:
 
 ```bash
 bash scripts/ensure-index.sh /path/to/project
@@ -32,14 +33,16 @@ reports that briefly and falls back to normal repository tools.
 
 ## Proactive use
 
-For an implementation, bug fix, refactor, rename, test, review, or architecture
+For any implementation, bug fix, refactor, rename, test, review, or architecture
 task, the skill queries `codegraph_explore` before broad file search or the first
-edit when relationships may cross files. It uses the graph to find entry points,
-callers, callees, routes, dependencies, and impact, then uses exact file tools
-only for symbols/files omitted by the graph, configs/docs, generated files, or
-stale-banner files. Cross-file changes get a second callers/impact query before
-they are finalized. If the CLI, MCP server, or index is unavailable, the skill
-reports that briefly and falls back to normal repository tools.
+edit — regardless of repository size or whether relationships are obviously
+cross-file. It uses the graph to find entry points, callers, callees, routes,
+dependencies, and impact, then uses exact file tools only for symbols/files
+omitted by the graph, configs/docs, generated files, or stale-banner files.
+Cross-file changes get a second callers/impact query before they are finalized.
+If MCP is unavailable, equivalent CLI commands are required substitutes. If
+initialization also fails, the skill reports that briefly and falls back to
+normal repository tools.
 
 ## Included behavior
 

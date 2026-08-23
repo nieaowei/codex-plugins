@@ -1,6 +1,6 @@
 ---
 name: codegraph
-description: Use CodeGraph proactively as the first repository map for implementation, debugging, refactoring, testing, review, and architecture work. Trigger before reading or editing code when callers, callees, routes, dependencies, or change impact are uncertain; automatically initialize an unindexed project for matching tasks, do not wait for the user to name CodeGraph, and fall back only when initialization or CodeGraph is unavailable or the task is an exact one-file lookup.
+description: ALWAYS use CodeGraph as the FIRST step of implementation, debugging, refactoring, testing, review, architecture, or any multi-file code investigation, before rg/grep/read/edit. Automatically initialize an unindexed project first; do not wait for the user to name CodeGraph. Only an exact single-file text lookup, self-contained docs/config edit, explicit user opt-out, or proven CodeGraph unavailability excuses skipping it.
 ---
 
 # CodeGraph
@@ -11,9 +11,10 @@ questions without crawling files one by one.
 
 ## When to activate
 
-Do not wait for the user to say “CodeGraph”. Treat CodeGraph as the default
-first-pass map whenever the task is a code change or investigation and any of
-these are true:
+Do not wait for the user to say “CodeGraph”, and do not treat this as a
+preference. For every code change or repository investigation, CodeGraph is the
+FIRST tool call — before `rg`, file crawling, or reading code. It applies
+whenever any of these are true:
 
 - the request says add, fix, change, refactor, rename, test, review, debug, or
   explain a feature;
@@ -23,16 +24,22 @@ these are true:
   surface, or impact assessment; or
 - the repository already has a `.codegraph/` index.
 
-Skip conditions take precedence even when an index exists: skip the graph for
-an exact one-file text lookup, a self-contained docs/config edit, or a task
-where the user explicitly asks not to inspect related code. When uncertain,
-make one narrow CodeGraph query; a cheap map is preferable to blindly opening a
-large tree.
+Only these narrow exceptions excuse skipping, even though a cheap query is
+almost always worth it:
+
+- an exact single-file text/line lookup with no cross-file question;
+- a self-contained docs/config edit;
+- the user explicitly says not to inspect related code.
+
+When uncertain whether the exceptions apply, they do not: run one narrow
+CodeGraph query anyway. A wrong skip that later needs grep/read loops costs far
+more than the query. If the MCP tool is unavailable, the CLI commands below are
+mandatory substitutes, not optional conveniences.
 
 ## Required workflow
 
-For a matching task, follow this sequence before broad `rg`, file crawling, or
-the first edit:
+For a matching task, this sequence is mandatory before broad `rg`, file
+crawling, or the first edit:
 
 1. Determine the repository root. Prefer the current workspace root; otherwise
    resolve it with `git -C <path> rev-parse --show-toplevel`.
@@ -58,7 +65,8 @@ the first edit:
 5. Treat the returned line-numbered source as already read. Use its symbols and
    call paths to choose edits; do not reopen or grep-check the same indexed
    source. Use exact file tools only for symbols/files omitted by the graph,
-   generated files, plain text, or configuration.
+   generated files, plain text, or configuration. Never answer a repository
+   question from memory or ad-hoc search when the graph can map it.
 6. For a cross-file change, query the relevant symbol's callers/callees or
    impact again before finalizing, then inspect affected tests. This second
    pass is the graph-backed regression check.
@@ -67,8 +75,10 @@ the first edit:
 
 ### Query recipes
 
-- New feature or refactor: explore the entry point, its callers/callees, and
-  the nearest tests before editing.
+- New feature: explore the integration point, similar existing features, and
+  their callers/tests before writing code.
+- Refactor: explore the entry point, its callers/callees, and the nearest tests
+  before editing.
 - Bug or unexpected behavior: explore the failing route/flow and both sides of
   the suspicious symbol before changing it.
 - Rename or API change: explore callers and impact, then inspect affected tests.
