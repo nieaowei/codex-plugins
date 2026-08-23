@@ -5,9 +5,21 @@
         "hooks": [
           {
             "type": "command",
-            "command": "sh "${PLUGIN_ROOT}/scripts/session-start.sh"",
+            "command": "sh \"${PLUGIN_ROOT}/scripts/session-start.sh\"",
             "timeout": 60,
             "statusMessage": "(codegraph) Checking index status"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${PLUGIN_ROOT}/scripts/stop-sync.sh\"",
+            "timeout": 30,
+            "statusMessage": "(codegraph) Syncing index"
           }
         ]
       }
