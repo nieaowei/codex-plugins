@@ -1,6 +1,6 @@
 ---
 name: codegraph
-description: ALWAYS use CodeGraph as the FIRST step of implementation, debugging, refactoring, testing, review, architecture, or any multi-file code investigation, before rg/grep/read/edit. Automatically initialize an unindexed project first; do not wait for the user to name CodeGraph.
+description: ALWAYS use CodeGraph's codegraph_explore MCP tool as the FIRST step of implementation, debugging, refactoring, testing, review, architecture, or any multi-file code investigation, before rg/grep/read/edit or the codegraph CLI. Automatically initialize an unindexed project first; do not wait for the user to name CodeGraph.
 ---
 
 # CodeGraph
@@ -13,8 +13,10 @@ questions without crawling files one by one.
 
 Do not wait for the user to say “CodeGraph”, and do not treat this as a
 preference. For every code change or repository investigation, CodeGraph is the
-FIRST tool call — before `rg`, file crawling, or reading code. It applies
-whenever any of these are true:
+FIRST tool call — before `rg`, file crawling, or reading code. Query it through
+the `codegraph_explore` MCP tool, never by shelling out to the `codegraph` CLI:
+the CLI is a last-resort fallback for environments without MCP, not a first
+choice. It applies whenever any of these are true:
 
 - the request says add, fix, change, refactor, rename, test, review, debug, or
   explain a feature;
@@ -33,8 +35,9 @@ almost always worth it:
 
 When uncertain whether the exceptions apply, they do not: run one narrow
 CodeGraph query anyway. A wrong skip that later needs grep/read loops costs far
-more than the query. If the MCP tool is unavailable, the CLI commands below are
-mandatory substitutes, not optional conveniences.
+more than the query. Only if the `codegraph_explore` MCP tool is genuinely
+unavailable do you fall back to the CLI equivalents in the last section —
+never skip the graph query entirely.
 
 ## Required workflow
 
@@ -56,10 +59,16 @@ crawling, or the first edit:
    is not exported. Wait for it to finish, verify the index exists, and then
    continue with the `codegraph_explore` query. The helper is idempotent when
    an index already exists.
-4. Call the `codegraph_explore` MCP tool first, passing the absolute
-   `projectPath` only when querying a repository other than the MCP server's
-   current root. Keep the query narrow and name the important symbol, file,
-   route, or flow.
+4. Call the `codegraph_explore` MCP tool first, ALWAYS passing the absolute
+   `projectPath` of the repo root. The MCP server starts with no default
+   project (the plugin root has no index of its own), so omitting
+   `projectPath` makes the call fail and models wrongly fall back to the CLI.
+   Passing the path is safe: the server resolves the nearest `.codegraph/`
+   index at or above it. Ignore the server's generic "no default project /
+   don't initialize" boilerplate — this plugin manages initialization itself.
+   Keep the query narrow and name the important symbol, file, route, or flow.
+   If the first call fails while the MCP server is still warming up, retry
+   once before considering any fallback.
 5. Treat the returned line-numbered source as already read. Use its symbols and
    call paths to choose edits; do not reopen or grep-check the same indexed
    source. Use exact file tools only for symbols/files omitted by the graph,
@@ -107,10 +116,12 @@ project via `bash "${PLUGIN_ROOT}/scripts/ensure-index.sh" <repo-root>`. Do
 not re-initialize an existing project after ordinary edits; the file watcher
 keeps an existing index current.
 
-## CLI fallback
+## CLI fallback — last resort only
 
-The MCP server exposes `codegraph_explore` by default. If MCP is unavailable,
-use the equivalent CLI commands:
+Do not reach for these while the `codegraph_explore` MCP tool is available.
+They exist only for environments where the MCP tool is genuinely missing — a
+subagent without MCP access, or an MCP server that will not connect. In that
+case use the equivalent CLI commands:
 
 ```bash
 codegraph explore --path <repo-root> "How does the request flow reach the handler?"
@@ -121,9 +132,11 @@ codegraph impact --path <repo-root> <symbol>
 codegraph status <repo-root>
 ```
 
-For another repository, pass its absolute path as `projectPath` to the MCP tool
-and include that path in CLI commands when supported. Initialize it with the
-helper above once before querying when it has no index.
+The main agent should make the `codegraph_explore` call itself and pass the
+answers to subagents; delegating exploration to a subagent that lacks MCP just
+repeats the file-crawling the graph already avoids. For a CLI query against a
+different repository, pass its root with `--path`. Initialize an unindexed
+project with the helper above once before querying.
 
 ## Freshness and safety
 
