@@ -6,7 +6,7 @@ description: Use CodeGraph in repositories with a .codegraph/ index before grep,
 ## CodeGraph
 
 In repositories indexed by CodeGraph (a `.codegraph/` directory exists at repo
-root), reach for it BEFORE grep/find or reading files when you need to
+root), reach for it BEFORE grep/find/rg or reading files when you need to
 understand or locate code:
 
 - **MCP tool — use it first, always:** `codegraph_explore` answers most code
@@ -50,7 +50,7 @@ automatically.
 Whether answering how something works or implementing a change, call
 `codegraph_explore` before reading indexed files. One call usually answers the
 whole question. CodeGraph is the pre-built search index, so a manual
-grep/read loop or a delegated file-reading task repeats work it has already
+grep/read/rg loop or a delegated file-reading task repeats work it has already
 done.
 
 ### How to query
@@ -67,8 +67,8 @@ done.
 
 ### Anti-patterns
 
-- Trust CodeGraph results instead of re-verifying them with grep.
-- Do not grep or read first to find or understand indexed code; use one
+- Trust CodeGraph results instead of re-verifying them with grep/rg.
+- Do not grep, rg or read first to find or understand indexed code; use one
   `codegraph_explore` call. Use raw tools only for details CodeGraph did not
   cover or for files it does not index, such as configs and docs.
 - Do not reconstruct a flow by hand; name its endpoints and let CodeGraph
