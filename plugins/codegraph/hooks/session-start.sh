@@ -35,9 +35,6 @@ done
 # CodeGraph stdio server once, preserving any existing project configuration.
 config_dir="${codegraph_root}/.codex"
 config_file="${config_dir}/config.toml"
-plugin_root="${PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)}"
-plugin_root="$(cd "${plugin_root}" 2>/dev/null && pwd -P || printf '%s' "${plugin_root}")"
-server_script="${plugin_root}/scripts/mcp-server.sh"
 
 # TOML permits either bare or quoted keys. Also recognize an inline server
 # under [mcp_servers] so repeated SessionStart events remain idempotent.
@@ -78,15 +75,6 @@ if ! has_codegraph_server; then
   if mkdir -p "${config_dir}" 2>/dev/null && mkdir "${lock_dir}" 2>/dev/null; then
     trap 'rmdir "${lock_dir}" 2>/dev/null || true' EXIT
     if ! has_codegraph_server; then
-      toml_escape() {
-        local value="$1"
-        value="${value//\\/\\\\}"
-        value="${value//\"/\\\"}"
-        value="${value//$'\n'/\\n}"
-        printf '%s' "${value}"
-      }
-      escaped_root="$(toml_escape "${codegraph_root}")"
-      escaped_script="$(toml_escape "${server_script}")"
       write_mcp_config() {
         if [[ -s "${config_file}" ]] && [[ "$(tail -c 1 "${config_file}" 2>/dev/null || true)" != $'\n' ]]; then
           printf '\n' >> "${config_file}" 2>/dev/null || return 1
@@ -94,9 +82,8 @@ if ! has_codegraph_server; then
         {
           printf '\n# Added by the CodeGraph plugin; remove this block to disable it.\n'
           printf '[mcp_servers.codegraph]\n'
-          printf 'command = "bash"\n'
-          printf 'args = ["%s"]\n' "${escaped_script}"
-          printf 'cwd = "%s"\n' "${escaped_root}"
+          printf 'command = "codegraph"\n'
+          printf 'args = ["serve", "--mcp"]\n'
         } >> "${config_file}" 2>/dev/null
       }
       if write_mcp_config; then
