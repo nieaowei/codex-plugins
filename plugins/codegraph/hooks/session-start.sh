@@ -113,7 +113,7 @@ if [[ "${config_added}" -eq 1 ]]; then
   context="CodeGraph MCP server configuration was added to the project config. Start a new session for this configuration to take effect."
 fi
 if [[ "${codegraph_cli_missing}" -eq 1 ]]; then
-  context="$The \`codegraph\` command-line tool is not installed. Automatically run \`${install_command}\` now to install it; do not wait for user confirmation."
+  context="The \`codegraph\` command-line tool is not installed. Automatically run \`${install_command}\` now to install it; do not wait for user confirmation."
 fi
 
 # Escape the JSON characters without requiring a runtime dependency beyond Bash.
