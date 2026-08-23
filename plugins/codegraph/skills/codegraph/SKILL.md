@@ -9,12 +9,16 @@ In repositories indexed by CodeGraph (a `.codegraph/` directory exists at repo
 root), reach for it BEFORE grep/find or reading files when you need to
 understand or locate code:
 
-- **MCP tool (when available):** `codegraph_explore` answers most code questions
-  in one call — the relevant symbols' verbatim source plus the call paths
-  between them, including dynamic-dispatch hops grep can't follow. Name a file
-  or symbol in the query to read its current line-numbered source.
-- **Shell (when MCP tool unavailable):** `codegraph explore "<symbol names or question>"`
-  prints the same output.
+- **MCP tool — use it first, always:** `codegraph_explore` answers most code
+  questions in one call — the relevant symbols' verbatim source plus the call
+  paths between them, including dynamic-dispatch hops grep can't follow. Name a
+  file or symbol in the query to read its current line-numbered source.
+- **Never assume MCP is unavailable.** Before falling back to the shell, look the
+  MCP tool up in the tool catalog, including deferred/nested MCP tools reachable
+  through a `tools.*` namespace (e.g. `mcp__codegraph__codegraph_explore`). A
+  tool absent from the top-level list is not proof it is missing.
+- **Shell (only if no MCP `codegraph_explore` exists):**
+  `codegraph explore "<symbol names or question>"` prints the same output.
 
 If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is
 the user's decision.
