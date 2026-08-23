@@ -53,7 +53,8 @@ Three plugin bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
   index check passes. It also idempotently adds a project-scoped
   `mcp_servers.codegraph` entry to `.codex/config.toml` and tells the user to
   start a new session when that entry is created. Keep the output concise and
-  avoid secrets.
+  avoid secrets. When the `codegraph` CLI is unavailable, it also instructs the
+  agent to run the plugin's installation command automatically.
 
 ## Development workflow
 

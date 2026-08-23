@@ -23,6 +23,8 @@ project already contains a `.codegraph/` index, the hook adds a missing
 `mcp_servers.codegraph` entry to that project's `.codex/config.toml`. The hook
 preserves existing configuration and tells you to start a new Codex session when
 it makes this change, because MCP servers are loaded at session creation. The
+hook also detects a missing `codegraph` CLI and instructs the agent through
+session context to run the plugin installation script automatically. The
 skill uses CodeGraph first for projects
 that already contain a `.codegraph/` index;
 unindexed projects are left to normal repository tools because indexing is the
@@ -63,5 +65,7 @@ required substitutes.
 - The `codegraph` skill triggers on implementation and investigation work, with
   an explicit skip condition for projects without a `.codegraph/` index.
 - The wrapper gives an actionable error when the CLI is not installed.
+- The `SessionStart` hook detects a missing CLI and instructs the agent to run
+  the installation script automatically when an indexed project starts.
 
 CodeGraph is MIT-licensed and runs locally. See the [upstream repository](https://github.com/colbymchenry/codegraph) and [documentation](https://colbymchenry.github.io/codegraph/) for the complete CLI, supported languages, and troubleshooting guide.
