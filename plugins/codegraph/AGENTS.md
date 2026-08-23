@@ -50,7 +50,10 @@ Three plugin bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
   clear, and compact events.
 - `hooks/session-start.sh` emits a hardcoded, concise reminder to use the
   `codegraph` skill through `hookSpecificOutput.additionalContext` after the
-  index check passes. Keep the output concise and avoid secrets.
+  index check passes. It also idempotently adds a project-scoped
+  `mcp_servers.codegraph` entry to `.codex/config.toml` and tells the user to
+  start a new session when that entry is created. Keep the output concise and
+  avoid secrets.
 
 ## Development workflow
 

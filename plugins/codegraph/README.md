@@ -18,8 +18,12 @@ This installs the CodeGraph release pinned in `.codex-plugin/plugin.json`
 (currently v1.5.0). Override with `CODEGRAPH_VERSION=x.y.z` when you need a
 different release.
 
-The plugin's MCP server starts `codegraph serve --mcp`; it does not modify Codex
-configuration outside the plugin. The skill uses CodeGraph first for projects
+The plugin's MCP server starts `codegraph serve --mcp`. On SessionStart, when a
+project already contains a `.codegraph/` index, the hook adds a missing
+`mcp_servers.codegraph` entry to that project's `.codex/config.toml`. The hook
+preserves existing configuration and tells you to start a new Codex session when
+it makes this change, because MCP servers are loaded at session creation. The
+skill uses CodeGraph first for projects
 that already contain a `.codegraph/` index;
 unindexed projects are left to normal repository tools because indexing is the
 user's decision:
@@ -53,7 +57,9 @@ required substitutes.
   and pre-edit code reconnaissance.
 - The `SessionStart` hook injects a hardcoded, concise reminder to use the
   `codegraph` skill through `hookSpecificOutput.additionalContext` on startup,
-  resume, clear, and compact when a project index is present.
+  resume, clear, and compact when a project index is present. It also adds a
+  missing project-scoped MCP configuration and injects a new-session reminder
+  when that configuration is created.
 - The `codegraph` skill triggers on implementation and investigation work, with
   an explicit skip condition for projects without a `.codegraph/` index.
 - The wrapper gives an actionable error when the CLI is not installed.
