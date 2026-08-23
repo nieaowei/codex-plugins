@@ -1,6 +1,6 @@
 {
   "name": "codegraph",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "CodeGraph semantic code intelligence for Codex: pre-indexed local code knowledge graph with auto sync.",
   "author": {
     "name": "Local developer"
