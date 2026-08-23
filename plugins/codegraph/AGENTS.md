@@ -7,9 +7,9 @@ coding agents working on this plugin and supplements the repo-level
 ## Plugin overview
 
 Bundles the upstream CodeGraph CLI and its `codegraph_explore` MCP tool as a
-Codex plugin. The skill makes CodeGraph the mandatory first step for code
-changes and investigations, and auto-initializes an unindexed project for
-matching tasks.
+Codex plugin. The skill uses CodeGraph first for indexed projects, skips
+unindexed projects, and a SessionStart hook injects the current skill
+description as additional developer context.
 
 ## Versioning contract
 
@@ -25,7 +25,7 @@ matching tasks.
 
 ## Scripts
 
-Three bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
+Three plugin bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
 
 - `common.sh` — sourced by the others. Sets `PLUGIN_ROOT`, and provides
   `resolve_codegraph_version` (from the manifest) and `resolve_codegraph_bin`
@@ -43,9 +43,14 @@ Three bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
 - `skills/codegraph/SKILL.md` is the only skill. Keep it aligned with upstream
   behavior (`codegraph_explore` is the only listed MCP tool; the CLI fallback
   commands mirror it).
-- The skill references `scripts/install-codegraph.sh` and
-  `scripts/ensure-index.sh`; when those change, update the skill's setup
-  instructions.
+
+## Hooks
+
+- `hooks/hooks.json` registers the `SessionStart` hook for startup, resume,
+  clear, and compact events.
+- `hooks/session-start.sh` reads the skill frontmatter and emits its
+  `description` through `hookSpecificOutput.additionalContext`. Keep the
+  output concise and avoid secrets.
 
 ## Development workflow
 
@@ -54,7 +59,7 @@ Three bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
 2. Bump the Codex cachebuster for local iteration with the plugin-creator
    `update_plugin_cachebuster.py` script.
 3. Validate: run the plugin-creator `validate_plugin.py` against
-   `plugins/codegraph` and `bash -n` every script.
+   `plugins/codegraph` and `bash -n` every script and hook.
 4. Reinstall from the `codex-plugins` marketplace and start a new thread to
    pick up the changes.
 
@@ -65,4 +70,3 @@ Three bash scripts (all `set -euo pipefail`) plus `scripts/common.sh`:
   privileges, and no unguarded destructive operations.
 - Never log secrets or credentials. Downloads go through the pinned upstream
   installer.
-
