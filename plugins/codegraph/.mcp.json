@@ -2,8 +2,8 @@
   "mcpServers": {
     "codegraph": {
       "type": "stdio",
-      "command": "codegraph",
-      "args": ["serve", "--mcp"]
+      "command": "sh",
+      "args": ["${PLUGIN_ROOT}/scripts/mcp-server.sh"]
     }
   }
 }
